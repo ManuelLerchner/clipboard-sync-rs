@@ -23,7 +23,7 @@ struct Args {
 
     /// The url(s) to send the clipboard contents to
     #[clap(long, short, required_if_eq_any([("sync_mode","sender"), ("sync_mode","bidirectional")]))]
-    reporting_urls: Vec<String>,
+    reporting_url: Vec<String>,
 
     /// The port to listen on
     #[clap(short, long, default_value = "2209")]
@@ -44,13 +44,13 @@ fn main() {
     //Start correcting functionallity
     match args.sync_mode {
         Mode::Sender => {
-            clipboard::register_clipboard_hook(wait_time, args.reporting_urls);
+            clipboard::register_clipboard_hook(wait_time, args.reporting_url);
         }
         Mode::Receiver => {
             server::start_server(args.port);
         }
         Mode::Bidirectional => {
-            clipboard::register_clipboard_hook(wait_time, args.reporting_urls);
+            clipboard::register_clipboard_hook(wait_time, args.reporting_url);
             server::start_server(args.port);
         }
     }
