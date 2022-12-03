@@ -12,6 +12,8 @@ jobs:
 
       - name: Configure rust
         run: rustup default nightly
+        
+      - name: Configure rust
         run: rustup overwrite set nightly
 
       - name: Build
