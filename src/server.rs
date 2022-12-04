@@ -31,7 +31,7 @@ pub fn clipboard(task: Json<ClipboardTask>) -> &'static str {
 
 pub fn start_server(port: u16) {
     let server_config = Config::build(rocket::config::Environment::Production)
-        .address("localhost")
+        .address("0.0.0.0")
         .port(port)
         .log_level(rocket::config::LoggingLevel::Off)
         .finalize()
