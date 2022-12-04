@@ -30,7 +30,7 @@ struct Args {
     port: u16,
 
     /// waiting time in ms bevore transmitting
-    #[clap(short, long, default_value = "64")]
+    #[clap(short, long, default_value = "1")]
     wait_time: u64,
 }
 
@@ -39,7 +39,7 @@ fn main() {
 
     println!("Starting in '{:?}'-Mode", args.sync_mode);
 
-    let wait_time = Duration::from_millis(args.wait_time);
+    let wait_time = Duration::from_secs(args.wait_time);
 
     //Start correcting functionallity
     match args.sync_mode {
