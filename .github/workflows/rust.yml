@@ -17,7 +17,7 @@ jobs:
         run: rustup override set nightly
 
       - name: Build
-         run: cargo build --release
+        run: cargo build --release
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
