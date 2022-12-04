@@ -1,8 +1,8 @@
 name: Release
 
 on:
-  push:
-    branches: master
+  release:
+    types: [published]
 
 jobs:
   create-release:
@@ -16,8 +16,8 @@ jobs:
       - name: Configure rust
         run: rustup override set nightly
 
-      # - name: Build
-      #   run: cargo build --release
+      - name: Build
+         run: cargo build --release
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
